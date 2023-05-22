@@ -29,10 +29,7 @@ catch (error) {
 ```ts
 import { safeGuard } from 'unres'
 
-// Destructure object
 const { data, error } = await safeGuard(client.getItems())
-// Or destructuring a tuple is also supported
-const [data, error] = await safeGuard(client.getItems())
 
 if (error)
   console.error(error)
@@ -42,6 +39,18 @@ if (error)
 </tr>
 
 </table>
+
+> **Info:**
+>
+> If you prefer to use tuples instead of objects, you can also destructure the return value of `safeGuard` as a tuple:
+
+```ts
+import { safeGuard } from 'unres'
+
+// Destructuring a tuple is also supported
+const [data, error] = await safeGuard(client.getItems())
+```
+
 
 ## Key Features
 
@@ -75,6 +84,7 @@ unres simplifies error handling in asynchronous functions using the `safeGuard` 
 import { safeGuard } from 'unres'
 
 const { data, error } = await safeGuard(client.getItems())
+
 if (error)
   console.error(error)
 ```
