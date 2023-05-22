@@ -1,12 +1,18 @@
-export interface Result<T, E extends Error | null> { data: T; error: E }
-export type DestructurableResult<T, E extends Error | null> = Result<T, E> & readonly [T, E]
+export interface Result<T, E extends Error | null> {
+  data: T
+  error: E
+}
+
+export type IsomorphicDestructurableResult<T, E extends Error | null> =
+  Result<T, E>
+  & readonly [T, E]
 
 type CustomError = new (...args: any[]) => Error
 
 export async function safeGuard<T, E extends CustomError = CustomError>(
   promiseOrFunction: Promise<T> | (() => T | Promise<T>),
   _errorType?: E,
-): Promise<DestructurableResult<T | null, InstanceType<E> | null>> {
+): Promise<IsomorphicDestructurableResult<T | null, InstanceType<E> | null>> {
   try {
     const data = typeof promiseOrFunction === 'function'
       ? await promiseOrFunction()
