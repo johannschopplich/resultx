@@ -40,7 +40,7 @@ if (error)
 
 </table>
 
-> **Info**
+> **Note**
 >
 > If you prefer to use tuples instead of objects, you can also destructure the return value of `safeGuard` as a tuple:
 
