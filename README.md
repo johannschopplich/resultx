@@ -40,9 +40,7 @@ if (error)
 
 </table>
 
-> **Note**
->
-> If you prefer to use tuples instead of objects, you can also destructure the return value of `guardedInvoke` as a tuple:
+If you prefer to use tuples instead of objects, you can also destructure the return value of `guardedInvoke` as a tuple:
 
 ```ts
 import { guardedInvoke } from 'unres'
@@ -50,7 +48,6 @@ import { guardedInvoke } from 'unres'
 // Destructuring a tuple is also supported
 const [data, error] = await guardedInvoke(client.getItems())
 ```
-
 
 ## Key Features
 
