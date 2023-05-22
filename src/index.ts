@@ -3,14 +3,14 @@ export interface Result<T, E> {
   error: E
 }
 
-export type IsomorphicDestructurableResult<T, E> = Result<T, E> & readonly [T, E]
+export type IsomorphicResult<T, E> = Result<T, E> & readonly [T, E]
 
 type CustomError = new (...args: any[]) => Error
 
 export async function guardedInvoke<T, E extends CustomError = CustomError>(
   promiseOrFunction: Promise<T> | (() => T | Promise<T>),
   _errorType?: E,
-): Promise<IsomorphicDestructurableResult<T | null, InstanceType<E> | null>> {
+): Promise<IsomorphicResult<T | null, InstanceType<E> | null>> {
   try {
     const data = typeof promiseOrFunction === 'function'
       ? await promiseOrFunction()
