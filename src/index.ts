@@ -7,7 +7,7 @@ export type IsomorphicDestructurableResult<T, E> = Result<T, E> & readonly [T, E
 
 type CustomError = new (...args: any[]) => Error
 
-export async function safeGuard<T, E extends CustomError = CustomError>(
+export async function guardedInvoke<T, E extends CustomError = CustomError>(
   promiseOrFunction: Promise<T> | (() => T | Promise<T>),
   _errorType?: E,
 ): Promise<IsomorphicDestructurableResult<T | null, InstanceType<E> | null>> {

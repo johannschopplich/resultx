@@ -27,9 +27,9 @@ catch (error) {
 <td>
 
 ```ts
-import { safeGuard } from 'unres'
+import { guardedInvoke } from 'unres'
 
-const { data, error } = await safeGuard(client.getItems())
+const { data, error } = await guardedInvoke(client.getItems())
 
 if (error)
   console.error(error)
@@ -42,13 +42,13 @@ if (error)
 
 > **Note**
 >
-> If you prefer to use tuples instead of objects, you can also destructure the return value of `safeGuard` as a tuple:
+> If you prefer to use tuples instead of objects, you can also destructure the return value of `guardedInvoke` as a tuple:
 
 ```ts
-import { safeGuard } from 'unres'
+import { guardedInvoke } from 'unres'
 
 // Destructuring a tuple is also supported
-const [data, error] = await safeGuard(client.getItems())
+const [data, error] = await guardedInvoke(client.getItems())
 ```
 
 
@@ -74,16 +74,16 @@ yarn add unres
 
 ## Usage
 
-Once installed, you can import the `safeGuard` function from unres and use it to wrap promises or functions in your code. Below are some usage examples that illustrate the key functionalities of unres:
+Once installed, you can import the `guardedInvoke` function from unres and use it to wrap promises or functions in your code. Below are some usage examples that illustrate the key functionalities of unres:
 
 ### Handling Errors in Async Functions
 
-unres simplifies error handling in asynchronous functions using the `safeGuard` function. If an error occurs, it is assigned to the `error` property and can be handled accordingly.
+unres simplifies error handling in asynchronous functions using the `guardedInvoke` function. If an error occurs, it is assigned to the `error` property and can be handled accordingly.
 
 ```ts
-import { safeGuard } from 'unres'
+import { guardedInvoke } from 'unres'
 
-const { data, error } = await safeGuard(client.getItems())
+const { data, error } = await guardedInvoke(client.getItems())
 
 if (error)
   console.error(error)
@@ -91,12 +91,12 @@ if (error)
 
 ### Handling Errors in Functions
 
-The `safeGuard` function can also be used with synchronous functions.
+The `guardedInvoke` function can also be used with synchronous functions.
 
 ```ts
-import { safeGuard } from 'unres'
+import { guardedInvoke } from 'unres'
 
-const { data, error } = await safeGuard(() => {
+const { data, error } = await guardedInvoke(() => {
   if (Math.random() > 0.5)
     return true
   else
@@ -109,12 +109,12 @@ if (error)
 
 ### Using Tuples
 
-In addition to returning objects, `safeGuard` can also return a tuple containing `data` and `error` values. This provides a neat, organized structure for error management:
+In addition to returning objects, `guardedInvoke` can also return a tuple containing `data` and `error` values. This provides a neat, organized structure for error management:
 
 ```ts
-import { safeGuard } from 'unres'
+import { guardedInvoke } from 'unres'
 
-const [data, error] = await safeGuard(client.getItems())
+const [data, error] = await guardedInvoke(client.getItems())
 
 if (error)
   console.error(error)
@@ -122,14 +122,14 @@ if (error)
 
 ## Custom Error Handling
 
-unres offers the flexibility to implement custom error handling strategies by overriding the default error type. This can be done by passing a custom error type as the second argument to the `safeGuard` function:
+unres offers the flexibility to implement custom error handling strategies by overriding the default error type. This can be done by passing a custom error type as the second argument to the `guardedInvoke` function:
 
 ```ts
-import { safeGuard } from 'unres'
+import { guardedInvoke } from 'unres'
 
 class CustomError extends Error {}
 
-const [data, error] = await safeGuard(() => {
+const [data, error] = await guardedInvoke(() => {
   throw new CustomError('Something went wrong')
 }, CustomError)
 
