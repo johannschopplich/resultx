@@ -1,0 +1,49 @@
+{
+  "name": "unres",
+  "type": "module",
+  "version": "0.0.0",
+  "packageManager": "pnpm@8.5.1",
+  "description": "Simplifying error handling in promises and functions",
+  "author": "Johann Schopplich <pkg@johannschopplich.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/johannschopplich/unres#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johannschopplich/unres.git"
+  },
+  "bugs": "https://github.com/johannschopplich/unres/issues",
+  "keywords": [
+    "result",
+    "rust",
+    "try-catch"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "release": "bumpp --commit --push --tag",
+    "test": "vitest",
+    "test:types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.39.0",
+    "@types/node": "^18.16.13",
+    "bumpp": "^9.1.0",
+    "eslint": "^8.41.0",
+    "typescript": "^5.0.4",
+    "unbuild": "^1.2.1",
+    "vitest": "^0.31.1"
+  }
+}
