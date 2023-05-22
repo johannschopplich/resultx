@@ -1,11 +1,9 @@
-export interface Result<T, E extends Error | null> {
+export interface Result<T, E> {
   data: T
   error: E
 }
 
-export type IsomorphicDestructurableResult<T, E extends Error | null> =
-  Result<T, E>
-  & readonly [T, E]
+export type IsomorphicDestructurableResult<T, E> = Result<T, E> & readonly [T, E]
 
 type CustomError = new (...args: any[]) => Error
 
