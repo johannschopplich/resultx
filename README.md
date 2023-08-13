@@ -52,6 +52,7 @@ const [data, error] = await guardedInvoke(client.getItems())
 ## Key Features
 
 - 💆‍♂️ Returns an object or tuple with `data` and `error` properties
+- 📼 Functions can be synchronous or asynchronous
 - 🛠️ Supports custom rejected Promise error types
 - 🦾 Strongly typed
 
@@ -86,18 +87,15 @@ if (error)
   console.error(error)
 ```
 
-### Handling Errors in Functions
+### Handling Errors in Synchronous Functions
 
 The `guardedInvoke` function can also be used with synchronous functions.
 
 ```ts
 import { guardedInvoke } from 'unres'
 
-const { data, error } = await guardedInvoke(() => {
-  if (Math.random() > 0.5)
-    return true
-  else
-    throw new Error('Something went wrong')
+const { data, error } = guardedInvoke(() => {
+  throw new Error('Something went wrong')
 })
 
 if (error)
