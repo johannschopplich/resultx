@@ -140,11 +140,11 @@ import { guardedInvoke } from 'unres'
 
 class CustomError extends Error {}
 
-const [data, error] = await guardedInvoke(() => {
+const [data, error] = guardedInvoke(() => {
   throw new CustomError('Something went wrong')
 }, CustomError)
 
-// The `error` variable will properly typed as `CustomError`
+// The `error` variable will properly be typed as `CustomError`
 if (error) {
   console.log(error instanceof CustomError) // `true`
   console.error(error)
