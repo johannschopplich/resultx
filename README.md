@@ -117,6 +117,22 @@ if (error)
   console.error(error)
 ```
 
+### Guarded Functions
+
+With `guardedInvokeFn` you can create a function that can be called with the same arguments, but guarded. This is useful when you want to guard a function that you don't own, like `JSON.parse`:
+
+```ts
+import { guardedInvokeFn } from 'unres'
+
+const safeJSONParse = guardedInvokeFn(JSON.parse)
+
+let result = safeJSONParse('{ "test": 1 }')
+console.log(result.data) // { test: 1 }
+
+result = safeJSONParse('{ missing the other one')
+console.log(result.error) // SyntaxError: Unexpected character 'm'
+```
+
 ## Custom Error Handling
 
 unres offers the flexibility to implement custom error handling strategies by overriding the default error type. This can be done by passing a custom error type as the second argument to the `guardedInvoke` function:

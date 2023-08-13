@@ -2,7 +2,7 @@
   "name": "unres",
   "type": "module",
   "version": "0.1.2",
-  "packageManager": "pnpm@8.5.1",
+  "packageManager": "pnpm@8.6.12",
   "description": "Go-like error handling for try/catch blocks",
   "author": "Johann Schopplich <pkg@johannschopplich.com>",
   "license": "MIT",
@@ -38,12 +38,12 @@
     "test:types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.39.0",
-    "@types/node": "^18.16.13",
-    "bumpp": "^9.1.0",
-    "eslint": "^8.41.0",
-    "typescript": "^5.0.4",
-    "unbuild": "^1.2.1",
-    "vitest": "^0.31.1"
+    "@antfu/eslint-config": "^0.40.2",
+    "@types/node": "^20.4.10",
+    "bumpp": "^9.1.1",
+    "eslint": "^8.47.0",
+    "typescript": "^5.1.6",
+    "unbuild": "^2.0.0-rc.0",
+    "vitest": "^0.34.1"
   }
 }
