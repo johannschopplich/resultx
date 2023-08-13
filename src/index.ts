@@ -33,19 +33,10 @@ export function guardedInvoke<T, E extends CustomError = CustomError>(
   _errorType?: E,
 ): IsomorphicResult<T, InstanceType<E>> | Promise<IsomorphicResult<T, InstanceType<E>>> {
   try {
-    if (promiseOrFn instanceof Promise) {
-      return promiseOrFn
-        .then(data => createIsomorphicDestructurable(
-          { data, error: null },
-          [data, null] as const,
-        ))
-        .catch(error => createIsomorphicDestructurable(
-          { data: null, error: error as InstanceType<E> },
-          [null, error as InstanceType<E>] as const,
-        ))
-    }
+    const result = promiseOrFn instanceof Promise
+      ? promiseOrFn
+      : promiseOrFn()
 
-    const result = promiseOrFn()
     if (result instanceof Promise) {
       return result
         .then(data => createIsomorphicDestructurable(
