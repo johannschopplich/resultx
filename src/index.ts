@@ -29,12 +29,12 @@ export function guardedInvoke<T, E extends CustomError = CustomError>(
   _errorType?: E,
 ): Promise<IsomorphicResult<T, InstanceType<E>>>
 export function guardedInvoke<T, E extends CustomError = CustomError>(
-  promiseOrFunction: Promise<T> | (() => T | Promise<T>),
+  promiseOrFn: Promise<T> | (() => T | Promise<T>),
   _errorType?: E,
 ): IsomorphicResult<T, InstanceType<E>> | Promise<IsomorphicResult<T, InstanceType<E>>> {
   try {
-    if (promiseOrFunction instanceof Promise) {
-      return promiseOrFunction
+    if (promiseOrFn instanceof Promise) {
+      return promiseOrFn
         .then(data => createIsomorphicDestructurable(
           { data, error: null },
           [data, null] as const,
@@ -44,26 +44,24 @@ export function guardedInvoke<T, E extends CustomError = CustomError>(
           [null, error as InstanceType<E>] as const,
         ))
     }
-    else {
-      const result = promiseOrFunction()
-      if (result instanceof Promise) {
-        return result
-          .then(data => createIsomorphicDestructurable(
-            { data, error: null },
-            [data, null] as const,
-          ))
-          .catch(error => createIsomorphicDestructurable(
-            { data: null, error: error as InstanceType<E> },
-            [null, error as InstanceType<E>] as const,
-          ))
-      }
-      else {
-        return createIsomorphicDestructurable(
-          { data: result, error: null },
-          [result, null] as const,
-        )
-      }
+
+    const result = promiseOrFn()
+    if (result instanceof Promise) {
+      return result
+        .then(data => createIsomorphicDestructurable(
+          { data, error: null },
+          [data, null] as const,
+        ))
+        .catch(error => createIsomorphicDestructurable(
+          { data: null, error: error as InstanceType<E> },
+          [null, error as InstanceType<E>] as const,
+        ))
     }
+
+    return createIsomorphicDestructurable(
+      { data: result, error: null },
+      [result, null] as const,
+    )
   }
   catch (error) {
     return createIsomorphicDestructurable(
