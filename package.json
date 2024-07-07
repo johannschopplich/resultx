@@ -1,7 +1,7 @@
 {
   "name": "resultx",
   "type": "module",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "packageManager": "pnpm@9.4.0",
   "description": "Go-like error handling for try/catch blocks",
   "author": "Johann Schopplich <hello@johannschopplich.com>",
