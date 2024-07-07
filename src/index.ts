@@ -41,23 +41,23 @@ export function guardedInvoke<T, E extends CustomError = CustomError>(
       return result
         .then(data => createIsomorphicDestructurable(
           { data, error: null },
-          [data, null] as const,
+          [data, null],
         ))
         .catch(error => createIsomorphicDestructurable(
           { data: null, error: error as InstanceType<E> },
-          [null, error as InstanceType<E>] as const,
+          [null, error as InstanceType<E>],
         ))
     }
 
     return createIsomorphicDestructurable(
       { data: result, error: null },
-      [result, null] as const,
+      [result, null],
     )
   }
   catch (error) {
     return createIsomorphicDestructurable(
       { data: null, error: error as InstanceType<E> },
-      [null, error as InstanceType<E>] as const,
+      [null, error as InstanceType<E>],
     )
   }
 }

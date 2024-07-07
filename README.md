@@ -31,8 +31,9 @@ import { guardedInvoke } from 'resultx'
 
 const { data, error } = await guardedInvoke(client.getItems())
 
-if (error)
+if (error) {
   console.error(error)
+}
 ```
 
 </td>
@@ -61,13 +62,13 @@ const [data, error] = await guardedInvoke(client.getItems())
 Installing resultx is as simple as running the following command:
 
 ```bash
-pnpm add resultx
+pnpm add -D resultx
 
 # Or with npm
-npm install resultx
+npm install -D resultx
 
 # Or with yarn
-yarn add resultx
+yarn add -D resultx
 ```
 
 ## Usage
@@ -83,8 +84,9 @@ import { guardedInvoke } from 'resultx'
 
 const { data, error } = await guardedInvoke(client.getItems())
 
-if (error)
+if (error) {
   console.error(error)
+}
 ```
 
 ### Handling Errors in Synchronous Functions
@@ -98,8 +100,9 @@ const { data, error } = guardedInvoke(() => {
   throw new Error('Something went wrong')
 })
 
-if (error)
+if (error) {
   console.error(error)
+}
 ```
 
 ### Using Tuples
@@ -111,8 +114,9 @@ import { guardedInvoke } from 'resultx'
 
 const [data, error] = await guardedInvoke(client.getItems())
 
-if (error)
+if (error) {
   console.error(error)
+}
 ```
 
 ### Guarded Functions

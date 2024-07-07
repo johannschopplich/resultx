@@ -1,6 +1,6 @@
 export function createIsomorphicDestructurable<
   T extends Record<string, unknown>,
-  A extends readonly any[],
+  const A extends readonly any[],
 >(obj: T, arr: A): T & A {
   const clone = { ...obj }
 
