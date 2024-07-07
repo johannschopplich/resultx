@@ -1,6 +1,6 @@
-# unres
+# resultx
 
-unres is a streamlined utility library that simplifies error handling by wrapping promises or functions and returning an object or tuple with `data` and `error` properties. This eliminates the necessity of using try/catch blocks, enhancing the readability and maintainability of your code:
+resultx is a streamlined utility library that simplifies error handling by wrapping promises or functions and returning an object or tuple with `data` and `error` properties. This eliminates the necessity of using try/catch blocks, enhancing the readability and maintainability of your code:
 
 <table>
 
@@ -27,7 +27,7 @@ catch (error) {
 <td>
 
 ```ts
-import { guardedInvoke } from 'unres'
+import { guardedInvoke } from 'resultx'
 
 const { data, error } = await guardedInvoke(client.getItems())
 
@@ -43,7 +43,7 @@ if (error)
 If you prefer to use tuples instead of objects, you can also destructure the return value of `guardedInvoke` as a tuple:
 
 ```ts
-import { guardedInvoke } from 'unres'
+import { guardedInvoke } from 'resultx'
 
 // Destructuring a tuple is also supported
 const [data, error] = await guardedInvoke(client.getItems())
@@ -58,28 +58,28 @@ const [data, error] = await guardedInvoke(client.getItems())
 
 ## Installation
 
-Installing unres is as simple as running the following command:
+Installing resultx is as simple as running the following command:
 
 ```bash
-pnpm add unres
+pnpm add resultx
 
 # Or with npm
-npm install unres
+npm install resultx
 
 # Or with yarn
-yarn add unres
+yarn add resultx
 ```
 
 ## Usage
 
-Once installed, you can import the `guardedInvoke` function from unres and use it to wrap promises or functions in your code. Below are some usage examples that illustrate the key functionalities of unres:
+Once installed, you can import the `guardedInvoke` function from resultx and use it to wrap promises or functions in your code. Below are some usage examples that illustrate the key functionalities of resultx:
 
 ### Handling Errors in Async Functions
 
-unres simplifies error handling in asynchronous functions using the `guardedInvoke` function. If an error occurs, it is assigned to the `error` property and can be handled accordingly.
+resultx simplifies error handling in asynchronous functions using the `guardedInvoke` function. If an error occurs, it is assigned to the `error` property and can be handled accordingly.
 
 ```ts
-import { guardedInvoke } from 'unres'
+import { guardedInvoke } from 'resultx'
 
 const { data, error } = await guardedInvoke(client.getItems())
 
@@ -92,7 +92,7 @@ if (error)
 The `guardedInvoke` function can also be used with synchronous functions.
 
 ```ts
-import { guardedInvoke } from 'unres'
+import { guardedInvoke } from 'resultx'
 
 const { data, error } = guardedInvoke(() => {
   throw new Error('Something went wrong')
@@ -107,7 +107,7 @@ if (error)
 In addition to returning objects, `guardedInvoke` can also return a tuple containing `data` and `error` values. This provides a neat, organized structure for error management:
 
 ```ts
-import { guardedInvoke } from 'unres'
+import { guardedInvoke } from 'resultx'
 
 const [data, error] = await guardedInvoke(client.getItems())
 
@@ -120,7 +120,7 @@ if (error)
 With `guardedInvokeFn` you can create a function that can be called with the same arguments, but guarded. This is useful when you want to guard a function that you don't own, like `JSON.parse`:
 
 ```ts
-import { guardedInvokeFn } from 'unres'
+import { guardedInvokeFn } from 'resultx'
 
 const safeJSONParse = guardedInvokeFn(JSON.parse)
 
@@ -133,10 +133,10 @@ console.log(result.error) // SyntaxError: Unexpected character 'm'
 
 ## Custom Error Handling
 
-unres offers the flexibility to implement custom error handling strategies by overriding the default error type. This can be done by passing a custom error type as the second argument to the `guardedInvoke` function:
+resultx offers the flexibility to implement custom error handling strategies by overriding the default error type. This can be done by passing a custom error type as the second argument to the `guardedInvoke` function:
 
 ```ts
-import { guardedInvoke } from 'unres'
+import { guardedInvoke } from 'resultx'
 
 class CustomError extends Error {}
 

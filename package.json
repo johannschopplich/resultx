@@ -1,17 +1,17 @@
 {
-  "name": "unres",
+  "name": "resultx",
   "type": "module",
   "version": "0.2.1",
   "packageManager": "pnpm@9.4.0",
   "description": "Go-like error handling for try/catch blocks",
   "author": "Johann Schopplich <hello@johannschopplich.com>",
   "license": "MIT",
-  "homepage": "https://github.com/johannschopplich/unres#readme",
+  "homepage": "https://github.com/johannschopplich/resultx#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/johannschopplich/unres.git"
+    "url": "git+https://github.com/johannschopplich/resultx.git"
   },
-  "bugs": "https://github.com/johannschopplich/unres/issues",
+  "bugs": "https://github.com/johannschopplich/resultx/issues",
   "keywords": [
     "result",
     "rust",
