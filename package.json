@@ -1,7 +1,7 @@
 {
   "name": "resultx",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "packageManager": "pnpm@9.4.0",
   "description": "Go-like error handling for try/catch blocks",
   "author": "Johann Schopplich <hello@johannschopplich.com>",
@@ -33,9 +33,9 @@
     "dev": "unbuild --stub",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "release": "bumpp",
     "test": "vitest",
-    "test:types": "tsc --noEmit"
+    "test:types": "tsc --noEmit",
+    "release": "bumpp"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.21.3",
