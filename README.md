@@ -25,7 +25,7 @@ For error handling in synchronous code, `resultx` provides a `trySafe` function 
 
 ## Installation
 
-Installing `resultx` is as simple as running one of the following commands, depending on your package manager:
+Add `resultx` to your dependencies by running one of the following commands, depending on your package manager:
 
 ```bash
 pnpm add -D resultx
@@ -40,7 +40,7 @@ yarn add -D resultx
 ## Usage
 
 ```ts
-import { err, ok, trySafe } from 'resultx'
+import { err, ok, trySafe, unwrap } from 'resultx'
 
 // Create `Ok` and `Err` results
 const successResult = ok(42)
@@ -51,15 +51,19 @@ const failureResult = err('Something went wrong')
 // Use `trySafe` for error handling
 const result = trySafe(() => {
   // Your code that might throw an error
-  return JSON.parse('{"key": "value"}')
+  return JSON.parse('{"foo":"bar"}')
 })
 
+// Either log the result or the error
 if (result.ok) {
   console.log('Parsed JSON:', result.value)
 }
 else {
   console.error('Failed to parse JSON:', result.error)
 }
+
+// Or unwrap and destructure the result
+const { value, error } = unwrap(result)
 ```
 
 ## API
@@ -81,10 +85,17 @@ The `Ok` type wraps a successful value.
 **Type Definition:**
 
 ```ts
-interface Ok<T> {
-  readonly ok: true
+declare class Ok<T> {
   readonly value: T
+  readonly ok: true
+  constructor(value: T)
 }
+```
+
+**Example:**
+
+```ts
+const result = new Ok(42)
 ```
 
 ### `Err`
@@ -94,10 +105,17 @@ The `Err` type wraps an error value.
 **Type Definition:**
 
 ```ts
-interface Err<E> {
-  readonly ok: false
+declare class Err<E> {
   readonly error: E
+  readonly ok: false
+  constructor(error: E)
 }
+```
+
+**Example:**
+
+```ts
+const result = new Err('Something went wrong')
 ```
 
 ### `ok`
@@ -141,6 +159,13 @@ Unwraps a `Result` and returns a tuple with the value and error: `{ value, error
 ```ts
 function unwrap<T>(result: Ok<T>): { value: T, error: undefined }
 function unwrap<E>(result: Err<E>): { value: undefined, error: E }
+```
+
+**Example:**
+
+```ts
+const result = trySafe(() => JSON.parse('{"foo":"bar"}'))
+const { value, error } = unwrap(result)
 ```
 
 ## Examples
