@@ -201,13 +201,13 @@ The `trySafe` function is useful for error handling in synchronous code. It wrap
 ```ts
 import { trySafe } from 'resultx'
 
-const jsonResult = trySafe(() => JSON.parse('{"key": "value"}'))
+const result = trySafe(() => JSON.parse('{"foo":"bar"}'))
 
-if (jsonResult.ok) {
-  console.log('Parsed JSON:', jsonResult.value)
+if (result.ok) {
+  console.log('Parsed JSON:', result.value)
 }
 else {
-  console.error('Failed to parse JSON:', jsonResult.error)
+  console.error('Failed to parse JSON:', result.error)
 }
 ```
 
