@@ -42,6 +42,7 @@ export function trySafe<T, E = unknown>(
 
 export function unwrap<T>(result: Ok<T>): { value: T, error: undefined }
 export function unwrap<E>(result: Err<E>): { value: undefined, error: E }
+export function unwrap<T, E>(result: Result<T, E>): { value: T, error: undefined } | { value: undefined, error: E }
 export function unwrap<T, E>(
   result: Result<T, E>,
 ): { value: T, error: undefined } | { value: undefined, error: E } {

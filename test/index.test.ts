@@ -29,14 +29,14 @@ describe('result type tests', () => {
   })
 
   it('handles failed synchronous operations', () => {
-    const result = trySafe(() => {
+    const result = trySafe<never, Error>(() => {
       throw new Error('test')
     })
     expect(result).toBeInstanceOf(Err)
     assertErr(result)
     expect(result.error).toBeInstanceOf(Error)
-    expect((result as Err<Error>).error.message).toBe('test')
-    expectTypeOf(result).toMatchTypeOf<Err< unknown>>()
+    expect(result.error.message).toBe('test')
+    expectTypeOf(result).toMatchTypeOf<Err<unknown>>()
   })
 
   it('handles successful asynchronous operations', async () => {
@@ -48,11 +48,11 @@ describe('result type tests', () => {
   })
 
   it('handles failed asynchronous operations', async () => {
-    const result = await trySafe(Promise.reject(new Error('test')))
+    const result = await trySafe<never, Error>(Promise.reject(new Error('test')))
     expect(result).toBeInstanceOf(Err)
     assertErr(result)
     expect(result.error).toBeInstanceOf(Error)
-    expect((result as Err<Error>).error.message).toBe('test')
+    expect(result.error.message).toBe('test')
     expectTypeOf(result).toMatchTypeOf<Err<unknown>>()
   })
 
@@ -84,18 +84,25 @@ describe('result type tests', () => {
   })
 
   it('unwraps an Ok result', () => {
-    const result = ok(42)
+    const result = ok(1)
     const unwrapped = unwrap(result)
-    expect(unwrapped).toEqual({ value: 42, error: undefined })
+    expect(unwrapped).toEqual({ value: 1, error: undefined })
     expectTypeOf(unwrapped).toMatchTypeOf<{ value: number, error: undefined }>()
   })
 
   it('unwraps an Err result', () => {
-    const error = new Error('test error')
+    const error = new Error('test')
     const result = err(error)
     const unwrapped = unwrap(result)
     expect(unwrapped).toEqual({ value: undefined, error })
     expectTypeOf(unwrapped).toMatchTypeOf<{ value: undefined, error: Error }>()
+  })
+
+  it('unwraps a result with type inference', () => {
+    const result = trySafe(() => 1)
+    const unwrapped = unwrap(result)
+    expect(unwrapped).toEqual({ value: 1, error: undefined })
+    expectTypeOf(unwrapped).toMatchTypeOf<{ value: unknown, error: unknown }>()
   })
 })
 

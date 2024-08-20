@@ -82,6 +82,12 @@ type Result<T, E> = Ok<T> | Err<E>
 
 The `Ok` type wraps a successful value.
 
+**Example:**
+
+```ts
+const result = new Ok(42)
+```
+
 **Type Definition:**
 
 ```ts
@@ -92,15 +98,15 @@ declare class Ok<T> {
 }
 ```
 
-**Example:**
-
-```ts
-const result = new Ok(42)
-```
-
 ### `Err`
 
 The `Err` type wraps an error value.
+
+**Example:**
+
+```ts
+const result = new Err('Something went wrong')
+```
 
 **Type Definition:**
 
@@ -110,12 +116,6 @@ declare class Err<E> {
   readonly ok: false
   constructor(error: E)
 }
-```
-
-**Example:**
-
-```ts
-const result = new Err('Something went wrong')
 ```
 
 ### `ok`
@@ -152,20 +152,21 @@ function trySafe<T, E = unknown>(promise: Promise<T>): Promise<Result<T, E>>
 
 ### `unwrap`
 
-Unwraps a `Result` and returns a tuple with the value and error: `{ value, error }`.
-
-**Type Definition:**
-
-```ts
-function unwrap<T>(result: Ok<T>): { value: T, error: undefined }
-function unwrap<E>(result: Err<E>): { value: undefined, error: E }
-```
+Unwraps a `Result`, `Ok`, or `Err` value and returns the value or error in an object. If the result is an `Ok`, the object contains the value and an `undefined` error. If the result is an `Err`, the object contains an `undefined` value and the error.
 
 **Example:**
 
 ```ts
 const result = trySafe(() => JSON.parse('{"foo":"bar"}'))
 const { value, error } = unwrap(result)
+```
+
+**Type Definition:**
+
+```ts
+function unwrap<T>(result: Ok<T>): { value: T, error: undefined }
+function unwrap<E>(result: Err<E>): { value: undefined, error: E }
+function unwrap<T, E>(result: Result<T, E>): { value: T, error: undefined } | { value: undefined, error: E }
 ```
 
 ## Examples
