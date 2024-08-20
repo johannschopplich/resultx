@@ -1,65 +1,31 @@
 # resultx
 
-resultx is a streamlined utility library that simplifies error handling by wrapping promises or functions and returning an object or tuple with `data` and `error` properties. This eliminates the necessity of using try/catch blocks, enhancing the readability and maintainability of your code:
+A lightweight and simple `Result` type for TypeScript, inspired by Rust's Result type.
 
-<table>
+## Description
 
-<tr>
-<th><p><strong>😮‍💨 Before</strong></p></th>
-<th><p><strong>🙆‍♂️ After</strong></p></th>
-</tr>
+`resultx` provides a `Result` type that represents either success (`Ok`) or failure (`Err`). It helps to handle errors in a more explicit and type-safe way, without relying on exceptions.
 
-<tr>
-<td>
-
-```ts
-let result
-
-try {
-  result = await client.getItems()
-}
-catch (error) {
-  console.error(error)
-}
-```
-
-</td>
-<td>
-
-```ts
-import { guardedInvoke } from 'resultx'
-
-const { data, error } = await guardedInvoke(client.getItems())
-
-if (error) {
-  console.error(error)
-}
-```
-
-</td>
-</tr>
-
-</table>
-
-If you prefer to use tuples instead of objects, you can also destructure the return value of `guardedInvoke` as a tuple:
-
-```ts
-import { guardedInvoke } from 'resultx'
-
-// Destructuring a tuple is also supported
-const [data, error] = await guardedInvoke(client.getItems())
-```
+For error handling in synchronous code, `resultx` provides a `trySafe` function that wraps a function that might throw an error. For asynchronous code, `trySafe` can also be used with promises.
 
 ## Key Features
 
-- 💆‍♂️ Returns an object or tuple with `data` and `error` properties
-- 📼 Functions can be synchronous or asynchronous
-- 🛠️ Supports custom rejected Promise error types
-- 🦾 Strongly typed
+- 🎭  Simple and intuitive `Result` type, wrapping `Ok` and `Err` values
+- 🚀 Supports both synchronous and asynchronous operations
+- 🛡️ Type-safe error handling
+- 🧰 Zero dependencies
+- 📦 Tiny bundle size (half a kilobyte minified)
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [API](#api)
+- [Examples](#examples)
 
 ## Installation
 
-Installing resultx is as simple as running the following command:
+Installing `resultx` is as simple as running one of the following commands, depending on your package manager:
 
 ```bash
 pnpm add -D resultx
@@ -73,92 +39,173 @@ yarn add -D resultx
 
 ## Usage
 
-Once installed, you can import the `guardedInvoke` function from resultx and use it to wrap promises or functions in your code. Below are some usage examples that illustrate the key functionalities of resultx:
-
-### Handling Errors in Async Functions
-
-resultx simplifies error handling in asynchronous functions using the `guardedInvoke` function. If an error occurs, it is assigned to the `error` property and can be handled accordingly.
-
 ```ts
-import { guardedInvoke } from 'resultx'
+import { err, ok, trySafe } from 'resultx'
 
-const { data, error } = await guardedInvoke(client.getItems())
+// Create `Ok` and `Err` results
+const successResult = ok(42)
+//                    ^? Ok<number>
+const failureResult = err('Something went wrong')
+//                    ^? Err<"Something went wrong">
 
-if (error) {
-  console.error(error)
-}
-```
-
-### Handling Errors in Synchronous Functions
-
-The `guardedInvoke` function can also be used with synchronous functions.
-
-```ts
-import { guardedInvoke } from 'resultx'
-
-const { data, error } = guardedInvoke(() => {
-  throw new Error('Something went wrong')
+// Use `trySafe` for error handling
+const result = trySafe(() => {
+  // Your code that might throw an error
+  return JSON.parse('{"key": "value"}')
 })
 
-if (error) {
-  console.error(error)
+if (result.ok) {
+  console.log('Parsed JSON:', result.value)
+}
+else {
+  console.error('Failed to parse JSON:', result.error)
 }
 ```
 
-### Using Tuples
+## API
 
-In addition to returning objects, `guardedInvoke` can also return a tuple containing `data` and `error` values. This provides a neat, organized structure for error management:
+### `Result`
+
+The `Result` type represents either success (`Ok`) or failure (`Err`).
+
+**Type Definition:**
 
 ```ts
-import { guardedInvoke } from 'resultx'
+type Result<T, E> = Ok<T> | Err<E>
+```
 
-const [data, error] = await guardedInvoke(client.getItems())
+#### `Ok`
 
-if (error) {
-  console.error(error)
+The `Ok` type wraps a successful value.
+
+**Type Definition:**
+
+```ts
+interface Ok<T> {
+  readonly ok: true
+  readonly value: T
 }
 ```
 
-### Guarded Functions
+### `Err`
 
-With `guardedInvokeFn` you can create a function that can be called with the same arguments, but guarded. This is useful when you want to guard a function that you don't own, like `JSON.parse`:
+The `Err` type wraps an error value.
 
-```ts
-import { guardedInvokeFn } from 'resultx'
-
-const safeJSONParse = guardedInvokeFn(JSON.parse)
-
-let result = safeJSONParse('{ "test": 1 }')
-console.log(result.data) // { test: 1 }
-
-result = safeJSONParse('{ missing the other one')
-console.log(result.error) // SyntaxError: Unexpected character 'm'
-```
-
-## Custom Error Handling
-
-resultx offers the flexibility to implement custom error handling strategies by overriding the default error type. This can be done by passing a custom error type as the second argument to the `guardedInvoke` function:
+**Type Definition:**
 
 ```ts
-import { guardedInvoke } from 'resultx'
-
-class CustomError extends Error {}
-
-const [data, error] = guardedInvoke(() => {
-  throw new CustomError('Something went wrong')
-}, CustomError)
-
-// The `error` variable will properly be typed as `CustomError`
-if (error) {
-  console.log(error instanceof CustomError) // `true`
-  console.error(error)
+interface Err<E> {
+  readonly ok: false
+  readonly error: E
 }
 ```
 
-## Credits
+### `ok`
 
-- [Henrique Cunha](https://github.com/henrycunh) for his [resguard](https://github.com/henrycunh/resguard) library, which inspired this project.
-- [Anthony Fu](https://github.com/antfu) for his post on [destructuring with object or array](https://antfu.me/posts/destructuring-with-object-or-array).
+Shorthand function to create an `Ok` result. Use it to wrap a successful value.
+
+**Type Definition:**
+
+```ts
+function ok<T>(value: T): Ok<T>
+```
+
+### `err`
+
+Shorthand function to create an `Err` result. Use it to wrap an error value.
+
+**Type Definition:**
+
+```ts
+function err<E extends string = string>(err: E): Err<E>
+function err<E = unknown>(err: E): Err<E>
+```
+
+### `trySafe`
+
+Wraps a function that might throw an error and returns a `Result` with the result of the function.
+
+**Type Definition:**
+
+```ts
+function trySafe<T, E = unknown>(fn: () => T): Result<T, E>
+function trySafe<T, E = unknown>(promise: Promise<T>): Promise<Result<T, E>>
+```
+
+### `unwrap`
+
+Unwraps a `Result` and returns a tuple with the value and error: `{ value, error }`.
+
+**Type Definition:**
+
+```ts
+function unwrap<T>(result: Ok<T>): { value: T, error: undefined }
+function unwrap<E>(result: Err<E>): { value: undefined, error: E }
+```
+
+## Examples
+
+### Basic Usage
+
+A common use case for `Result` is error handling in functions that might fail. Here's an example of a function that divides two numbers and returns a `Result`:
+
+```ts
+import { err, ok } from 'resultx'
+
+function divide(a: number, b: number) {
+  if (b === 0) {
+    return err('Division by zero')
+  }
+  return ok(a / b)
+}
+
+const result = divide(10, 2)
+if (result.ok) {
+  console.log('Result:', result.value)
+}
+else {
+  console.error('Error:', result.error)
+}
+```
+
+### Error Handling with `trySafe`
+
+The `trySafe` function is useful for error handling in synchronous code. It wraps a function that might throw an error and returns a `Result`:
+
+```ts
+import { trySafe } from 'resultx'
+
+const jsonResult = trySafe(() => JSON.parse('{"key": "value"}'))
+
+if (jsonResult.ok) {
+  console.log('Parsed JSON:', jsonResult.value)
+}
+else {
+  console.error('Failed to parse JSON:', jsonResult.error)
+}
+```
+
+### Async Operations with `trySafe`
+
+For asynchronous operations, `trySafe` can also be used with promises. Here's an example of fetching data from an API:
+
+```ts
+import { trySafe } from 'resultx'
+
+async function fetchData() {
+  const result = await trySafe(fetch('https://api.example.com/data'))
+
+  if (result.ok) {
+    const data = await result.value.json()
+    console.log('Fetched data:', data)
+  }
+  else {
+    console.error('Failed to fetch data:', result.error)
+  }
+}
+
+fetchData()
+```
 
 ## License
 

@@ -1,80 +1,51 @@
-import { createIsomorphicDestructurable } from './utils'
+export type Result<T, E> = Ok<T> | Err<E>
 
-export interface Result<T, E> {
-  data: T
-  error: E
+export class Ok<T> {
+  readonly ok = true as const
+  constructor(readonly value: T) { }
 }
 
-export type IsomorphicResult<T, E> =
-  | (Result<T, null> & readonly [T, null])
-  | (Result<null, E> & readonly [null, E])
+export class Err<E> {
+  readonly ok = false as const
+  // eslint-disable-next-line node/handle-callback-err
+  constructor(readonly error: E) { }
+}
 
-type CustomError = new (...args: any[]) => Error
-type ReturnsPromise<T extends (...args: any[]) => any> = ReturnType<T> extends Promise<any> ? true : false
+export function ok<T>(value: T): Ok<T> {
+  return new Ok(value)
+}
 
-export function guardedInvoke<_T = never, E extends CustomError = CustomError>(
-  fn: () => never,
-  _errorType?: E,
-): IsomorphicResult<never, InstanceType<E>>
-export function guardedInvoke<T, E extends CustomError = CustomError>(
-  fn: () => Promise<T>,
-  _errorType?: E,
-): Promise<IsomorphicResult<T, InstanceType<E>>>
-export function guardedInvoke<T, E extends CustomError = CustomError>(
-  fn: () => T,
-  _errorType?: E,
-): IsomorphicResult<T, InstanceType<E>>
-export function guardedInvoke<T, E extends CustomError = CustomError>(
-  promise: Promise<T>,
-  _errorType?: E,
-): Promise<IsomorphicResult<T, InstanceType<E>>>
-export function guardedInvoke<T, E extends CustomError = CustomError>(
-  promiseOrFn: Promise<T> | (() => T | Promise<T>),
-  _errorType?: E,
-): IsomorphicResult<T, InstanceType<E>> | Promise<IsomorphicResult<T, InstanceType<E>>> {
+export function err<E extends string = string>(err: E): Err<E>
+export function err<E = unknown>(err: E): Err<E>
+export function err<E>(error: E): Err<E> {
+  return new Err(error)
+}
+
+export function trySafe<T, E = unknown>(fn: () => T): Result<T, E>
+export function trySafe<T, E = unknown>(promise: Promise<T>): Promise<Result<T, E>>
+export function trySafe<T, E = unknown>(
+  fnOrPromise: (() => T) | Promise<T>,
+): Result<T, E> | Promise<Result<T, E>> {
+  if (fnOrPromise instanceof Promise) {
+    return fnOrPromise
+      .then(value => new Ok(value))
+      .catch(error => new Err(error as E))
+  }
+
   try {
-    const result = promiseOrFn instanceof Promise
-      ? promiseOrFn
-      : promiseOrFn()
-
-    if (result instanceof Promise) {
-      return result
-        .then(data => createIsomorphicDestructurable(
-          { data, error: null },
-          [data, null],
-        ))
-        .catch(error => createIsomorphicDestructurable(
-          { data: null, error: error as InstanceType<E> },
-          [null, error as InstanceType<E>],
-        ))
-    }
-
-    return createIsomorphicDestructurable(
-      { data: result, error: null },
-      [result, null],
-    )
+    return new Ok(fnOrPromise())
   }
   catch (error) {
-    return createIsomorphicDestructurable(
-      { data: null, error: error as InstanceType<E> },
-      [null, error as InstanceType<E>],
-    )
+    return new Err(error as E)
   }
 }
 
-export function guardedInvokeFn<
-  T extends (...args: any[]) => any,
-  E extends CustomError = CustomError,
->(
-  fn: T,
-  _errorType?: E,
-) {
-  const callback = (...args: Parameters<T>) =>
-    guardedInvoke(() => fn(...args))
-
-  return callback as (...args: Parameters<T>) => ReturnsPromise<T> extends true
-    ? ReturnType<T> extends Promise<infer U>
-      ? Promise<IsomorphicResult<U, InstanceType<E>>>
-      : never
-    : IsomorphicResult<ReturnType<T>, InstanceType<E>>
+export function unwrap<T>(result: Ok<T>): { value: T, error: undefined }
+export function unwrap<E>(result: Err<E>): { value: undefined, error: E }
+export function unwrap<T, E>(
+  result: Result<T, E>,
+): { value: T, error: undefined } | { value: undefined, error: E } {
+  return result.ok
+    ? { value: result.value, error: undefined }
+    : { value: undefined, error: result.error }
 }
