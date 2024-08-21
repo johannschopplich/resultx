@@ -5,12 +5,12 @@ export interface UnwrappedErr<E> { value: undefined, error: E }
 export type UnwrappedResult<T, E> = UnwrappedOk<T> | UnwrappedErr<E>
 
 export class Ok<T> {
-  readonly ok = true as const
+  readonly ok = true
   constructor(readonly value: T) { }
 }
 
 export class Err<E> {
-  readonly ok = false as const
+  readonly ok = false
   // eslint-disable-next-line node/handle-callback-err
   constructor(readonly error: E) { }
 }
