@@ -102,7 +102,7 @@ describe('result type tests', () => {
     const result = trySafe(() => 1)
     const unwrapped = unwrap(result)
     expect(unwrapped).toEqual({ value: 1, error: undefined })
-    expectTypeOf(unwrapped).toMatchTypeOf<{ value: unknown, error: unknown }>()
+    expectTypeOf(unwrapped).toMatchTypeOf<{ value: number | undefined, error: unknown }>()
   })
 })
 

@@ -1,5 +1,9 @@
 export type Result<T, E> = Ok<T> | Err<E>
 
+export interface UnwrappedOk<T> { value: T, error: undefined }
+export interface UnwrappedErr<E> { value: undefined, error: E }
+export type UnwrappedResult<T, E> = UnwrappedOk<T> | UnwrappedErr<E>
+
 export class Ok<T> {
   readonly ok = true as const
   constructor(readonly value: T) { }
@@ -15,9 +19,9 @@ export function ok<T>(value: T): Ok<T> {
   return new Ok(value)
 }
 
-export function err<E extends string = string>(err: E): Err<E>
-export function err<E = unknown>(err: E): Err<E>
-export function err<E>(error: E): Err<E> {
+export function err<E extends string = string>(error: E): Err<E>
+export function err<E = unknown>(error: E): Err<E>
+export function err<E = unknown>(error: E): Err<E> {
   return new Err(error)
 }
 
@@ -40,12 +44,10 @@ export function trySafe<T, E = unknown>(
   }
 }
 
-export function unwrap<T>(result: Ok<T>): { value: T, error: undefined }
-export function unwrap<E>(result: Err<E>): { value: undefined, error: E }
-export function unwrap<T, E>(result: Result<T, E>): { value: T, error: undefined } | { value: undefined, error: E }
-export function unwrap<T, E>(
-  result: Result<T, E>,
-): { value: T, error: undefined } | { value: undefined, error: E } {
+export function unwrap<T>(result: Ok<T>): UnwrappedOk<T>
+export function unwrap<E>(result: Err<E>): UnwrappedErr<E>
+export function unwrap<T, E>(result: Result<T, E>): UnwrappedResult<T, E>
+export function unwrap<T, E>(result: Result<T, E>): UnwrappedResult<T, E> {
   return result.ok
     ? { value: result.value, error: undefined }
     : { value: undefined, error: result.error }
