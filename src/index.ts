@@ -31,16 +31,14 @@ export function trySafe<T, E = unknown>(
   fnOrPromise: (() => T) | Promise<T>,
 ): Result<T, E> | Promise<Result<T, E>> {
   if (fnOrPromise instanceof Promise) {
-    return fnOrPromise
-      .then(value => new Ok(value))
-      .catch(error => new Err(error as E))
+    return fnOrPromise.then(ok).catch((err as (error: unknown) => Err<E>))
   }
 
   try {
-    return new Ok(fnOrPromise())
+    return ok(fnOrPromise())
   }
   catch (error) {
-    return new Err(error as E)
+    return err(error as E)
   }
 }
 
