@@ -1,6 +1,6 @@
-import { describe, expect, expectTypeOf, it } from 'vitest'
-import { Err, Ok, err, ok, trySafe, unwrap } from '../src'
 import type { Result } from '../src'
+import { describe, expect, expectTypeOf, it } from 'vitest'
+import { Err, err, Ok, ok, trySafe, unwrap } from '../src'
 
 describe('result type tests', () => {
   it('creates an Ok result', () => {
